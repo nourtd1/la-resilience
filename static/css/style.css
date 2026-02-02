@@ -1,0 +1,172 @@
+/* --- Hôtel La Résilience Design System --- */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Palette Premium */
+    --primary-color: #1a2a6c;
+    /* Bleu Nuit Profond */
+    --secondary-color: #b21f1f;
+    /* Rouge Riche (Accents) */
+    --accent-color: #fdbb2d;
+    /* Or/Ambre (Détails) */
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.5);
+    --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+
+    /* Text Colors */
+    --text-main: #2d3436;
+    --text-muted: #636e72;
+    --text-light: #ffffff;
+
+    /* Status Colors */
+    --status-free: #00b894;
+    --status-busy: #d63031;
+    --status-reserved: #fdcb6e;
+
+    /* Spacing */
+    --radius-lg: 20px;
+    --radius-md: 12px;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+}
+
+/* Typography & Titles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+h2.section-title {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+h2.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+}
+
+/* Navbar Premium */
+.navbar-premium {
+    background: rgba(26, 42, 108, 0.95) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-soft);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent-color) !important;
+    text-transform: uppercase;
+}
+
+/* KPI Cards Specifics */
+.kpi-value {
+    font-size: 3rem;
+    font-weight: 700;
+    background: -webkit-linear-gradient(45deg, var(--primary-color), #203a43);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.kpi-icon {
+    font-size: 2.5rem;
+    opacity: 0.8;
+}
+
+/* Table Design */
+.table-premium thead th {
+    background-color: rgba(26, 42, 108, 0.05);
+    color: var(--primary-color);
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 15px;
+}
+
+.table-premium td {
+    vertical-align: middle;
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.badge-pill {
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.delay-1 {
+    animation-delay: 0.1s;
+}
+
+.delay-2 {
+    animation-delay: 0.2s;
+}
+
+.delay-3 {
+    animation-delay: 0.3s;
+}
+
+.delay-4 {
+    animation-delay: 0.4s;
+}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nouvelle Réservation{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div class="d-flex align-items-center mb-4">
+            <a href="{% url 'reception_rooms' %}" class="btn btn-outline-light me-3 rounded-circle"
+                style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h2 class="h3 mb-0 text-white fw-bold">Nouvelle Réservation</h2>
+        </div>
+
+        <div class="card border-0 shadow-lg mb-5 overflow-hidden glass-card"
+            style="background: rgba(255,255,255,0.95);">
+            <div class="card-body p-5">
+
+                {% if form.errors %}
+                <div class="alert alert-danger mb-4 rounded-3 shadow-sm border-0">
+                    <h5 class="alert-heading h6 fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Erreur de
+                        validation</h5>
+                    <ul class="mb-0 ps-3 small">
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-uppercase small text-muted">Client</label>
+                        {{ form.client }}
+                        <div class="form-text">Sélectionnez le client principal du séjour.</div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-uppercase small text-muted">Date d'arrivée</label>
+                            {{ form.check_in }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-uppercase small text-muted">Date de départ</label>
+                            {{ form.check_out }}
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label fw-bold text-uppercase small text-muted">Chambre</label>
+                        {{ form.room }}
+                        <div class="form-text">Seules les chambres libres devraient être sélectionnables (vérification
+                            au moment de l'enregistrement).</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm fw-bold">
+                            <i class="fas fa-check-circle me-2"></i>Confirmer la réservation
+                        </button>
+                        <a href="{% url 'reception_rooms' %}" class="btn btn-light rounded-pill">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

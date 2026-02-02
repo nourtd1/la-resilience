@@ -1,0 +1,250 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static dashboard_extras %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>
+    /* Global Dashboard Reset */
+    .content-wrapper {
+        background: #f8f9fa !important;
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    /* 1. Header Section - Clean & Minimal */
+    .dash-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 2.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .dash-title h1 {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+        font-size: 2rem;
+        color: #1a2a6c;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+
+    .dash-subtitle {
+        color: #6c757d;
+        font-size: 1rem;
+        margin-top: 5px;
+    }
+
+    .dash-date {
+        font-weight: 600;
+        color: #1a2a6c;
+        background: #eef2f7;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+    }
+
+    /* 2. KPI Cards - Widget Style */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .kpi-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.02);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(26, 42, 108, 0.08);
+    }
+
+    .kpi-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, transparent 50%, rgba(26, 42, 108, 0.03) 50%);
+        border-radius: 0 16px 0 50%;
+    }
+
+    .kpi-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .kpi-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .icon-blue {
+        background: rgba(26, 42, 108, 0.1);
+        color: #1a2a6c;
+    }
+
+    .icon-green {
+        background: rgba(0, 184, 148, 0.1);
+        color: #00b894;
+    }
+
+    .icon-orange {
+        background: rgba(253, 203, 110, 0.1);
+        color: #e1b12c;
+    }
+
+    .icon-red {
+        background: rgba(214, 48, 49, 0.1);
+        color: #d63031;
+    }
+
+    .kpi-label {
+        font-size: 0.85rem;
+        color: #636e72;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2d3436;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+
+    .kpi-status {
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .status-up {
+        color: #00b894;
+    }
+
+    .status-neutral {
+        color: #636e72;
+    }
+
+    /* Empty State / Bottom Fill */
+    .dashboard-spacer {
+        flex-grow: 1;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #95a5a6;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Load custom stats tag -->
+{% get_dashboard_stats as stats %}
+
+<div class="dashboard-container">
+
+    <!-- 1. Header -->
+    <div class="dash-header animate-fade-in">
+        <div class="dash-title">
+            <h1>Vue d'Ensemble</h1>
+            <div class="dash-subtitle">Bienvenue, {{ request.user.first_name|default:request.user.username }} ! Voici ce
+                qui se passe aujourd'hui.</div>
+        </div>
+        <div class="dash-date">
+            <i class="far fa-calendar-alt me-2"></i> {% now "l, d F Y" %}
+        </div>
+    </div>
+
+    <!-- 2. KPI Widgets -->
+    <div class="kpi-grid">
+        <!-- Revenue Widget -->
+        <div class="kpi-card animate-fade-in delay-1">
+            <div class="kpi-top">
+                <span class="kpi-label">Chiffre d'Affaires</span>
+                <div class="kpi-icon-box icon-green"><i class="fas fa-wallet"></i></div>
+            </div>
+            <div class="kpi-value">{{ stats.revenue|floatformat:0 }} €</div>
+            <div class="kpi-status status-up">
+                <i class="fas fa-arrow-up"></i>
+                <span>Payé et encaissé</span>
+            </div>
+        </div>
+
+        <!-- Occupancy Widget -->
+        <div class="kpi-card animate-fade-in delay-2">
+            <div class="kpi-top">
+                <span class="kpi-label">Occupation</span>
+                <div class="kpi-icon-box icon-blue"><i class="fas fa-bed"></i></div>
+            </div>
+            <div class="kpi-value">{{ stats.occupancy_rate }}%</div>
+            <div class="kpi-status status-neutral">
+                <i class="fas fa-door-open me-1"></i>
+                <span>{{ stats.rooms_available }} chambres libres</span>
+            </div>
+        </div>
+
+        <!-- Reservations Widget -->
+        <div class="kpi-card animate-fade-in delay-3">
+            <div class="kpi-top">
+                <span class="kpi-label">Réservations</span>
+                <div class="kpi-icon-box icon-orange"><i class="fas fa-calendar-check"></i></div>
+            </div>
+            <div class="kpi-value">{{ stats.reservations_pending }}</div>
+            <div class="kpi-status" style="color: #e1b12c;">
+                <i class="fas fa-clock me-1"></i>
+                <span>En attente de confirmation</span>
+            </div>
+        </div>
+
+        <!-- Clients Widget -->
+        <div class="kpi-card animate-fade-in delay-4">
+            <div class="kpi-top">
+                <span class="kpi-label">Clients</span>
+                <div class="kpi-icon-box icon-red"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="kpi-value">{{ stats.total_clients }}</div>
+            <div class="kpi-status status-neutral">
+                <span>Base de données clients</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Bottom Spacer / Copyright -->
+    <div class="animate-fade-in delay-4"
+        style="text-align: center; margin-top: 3rem; color: #b2bec3; font-size: 0.85rem;">
+        <i class="fas fa-hotel me-2"></i> Hôtel La Résilience • v2.0
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,261 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hôtel La Résilience{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .room-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: #fff;
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .status-strip {
+            height: 4px;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .status-free .status-strip {
+            background-color: #00b894;
+        }
+
+        .status-free .room-overlay {
+            background: rgba(0, 184, 148, 0.9);
+        }
+
+        .status-busy .status-strip {
+            background-color: #d63031;
+        }
+
+        .status-busy .room-overlay {
+            background: rgba(214, 48, 49, 0.9);
+        }
+
+        .status-maint .status-strip {
+            background-color: #636e72;
+        }
+
+        .status-maint .room-overlay {
+            background: rgba(99, 110, 114, 0.9);
+        }
+
+        .room-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .room-card:hover .room-overlay {
+            opacity: 1;
+        }
+
+        /* FAB (Floating Action Button) */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+
+        .fab-main {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(26, 42, 108, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .fab-container:hover .fab-main {
+            transform: rotate(45deg);
+            background: var(--secondary-color);
+        }
+
+        .fab-options {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            pointer-events: none;
+            /* Hidden by default */
+        }
+
+        .fab-container:hover .fab-options {
+            pointer-events: all;
+        }
+
+        .fab-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+        }
+
+        .fab-container:hover .fab-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fab-container:hover .fab-item:nth-child(1) {
+            transition-delay: 0.2s;
+        }
+
+        .fab-container:hover .fab-item:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+
+        .fab-container:hover .fab-item:nth-child(3) {
+            transition-delay: 0s;
+        }
+
+        .fab-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .fab-btn:hover {
+            transform: scale(1.1);
+            color: white !important;
+        }
+
+        .fab-label {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-premium sticky-top mb-5">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">
+                <i class="fa-solid fa-hotel me-2"></i> La Résilience
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Réception
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li><a class="dropdown-item" href="{% url 'reception_rooms' %}"><i
+                                        class="fas fa-bed me-2 text-primary"></i>Planning Chambres</a></li>
+                            <li><a class="dropdown-item" href="{% url 'reception_reservations' %}"><i
+                                        class="fas fa-calendar-alt me-2 text-primary"></i>Réservations</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'reception_reservation_create' %}"><i
+                                        class="fas fa-plus-circle me-2 text-success"></i>Nouvelle Réservation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">Administration</a>
+                    </li>
+                    <li class="nav-item dropdown ms-3">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> {{ user.username|default:"Compte" }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                            <li>
+                                <h6 class="dropdown-header">Connecté en tant que {{ user.role }}</h6>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" class="d-flex w-100">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item text-danger w-100">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container pb-5">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-muted mt-auto">
+        <div class="container">
+            <p class="mb-0 small">&copy; {% now "Y" %} Hôtel La Résilience - Système de Gestion Hôtelière Premium</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Petite interaction pour activer les tooltips partout
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+</body>
+
+</html>
