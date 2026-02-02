@@ -180,8 +180,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Dev: console
 # EMAIL_HOST = 'smtp.gmail.com'  # Exemple pour Gmail
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'votre-email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'votre-mot-de-passe'
+# EMAIL_HOST_USER = 'exemple@domaine.com'
+# EMAIL_HOST_PASSWORD = 'mot-de-passe-secret-ici'
 # DEFAULT_FROM_EMAIL = 'noreply@hotel-resilience.com'
 
 # Authentication Settings

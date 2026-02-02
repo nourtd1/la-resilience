@@ -177,11 +177,11 @@ DATABASE_URL=postgres://user:password@localhost/dbname
 
 # Email
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST=smtp.exemple.com
 EMAIL_PORT=587
 EMAIL_USE_TLS=True
-EMAIL_HOST_USER=votre-email@gmail.com
-EMAIL_HOST_PASSWORD=votre-mot-de-passe-app
+EMAIL_HOST_USER=user@exemple.com
+EMAIL_HOST_PASSWORD=mot-de-passe-securise
 ```
 
 ### Déploiement sur des plateformes cloud
